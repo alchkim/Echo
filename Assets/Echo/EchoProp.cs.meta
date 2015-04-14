@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ae0c0c374f69ab74c80046a1d40a7ad9
+timeCreated: 1428970989
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - EchoTexture: {instanceID: 0}
+  - EchoMaterial: {fileID: 2100000, guid: 7d6d94d8ddaeb624d85d7ef6828c8c36, type: 2}
+  - control: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
