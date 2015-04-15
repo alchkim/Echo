@@ -6,6 +6,7 @@ public class Shoot : MonoBehaviour {
 	private float proj_speed = 2000;
 	private bool oldTrigger = false;
 	private string player;
+	int limit = 2;
 	GameObject list;
 
 	void Start () {
@@ -23,10 +24,10 @@ public class Shoot : MonoBehaviour {
 	}
 
 	void Fire () {
-		if (list.transform.childCount > 2) {
-			GameObject temp = list.transform.GetChild(0).gameObject;
-			Destroy (temp);
-		}
+//		if (list.transform.childCount > limit) {
+//			GameObject temp = list.transform.GetChild(0).gameObject;
+//			Destroy (temp);
+//		}
 		var bob = transform.Find ("Main Camera" + player).transform.forward;
 		GameObject bullet = Instantiate(projectile, bob + transform.position + new Vector3 (0, 1, 0), Quaternion.identity) as GameObject;
 		bullet.transform.parent = list.transform;

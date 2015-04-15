@@ -1,10 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Shoot\Shoot.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Timer.cs">
     <Files>
+      <File FileName="Assets\Menu\Menu.cs" Line="13" Column="35" />
       <File FileName="Assets\Spawn.cs" Line="1" Column="1" />
-      <File FileName="Assets\Echo\EchoProp.cs" Line="83" Column="22" />
-      <File FileName="Assets\Shoot\Shoot.cs" Line="31" Column="1" />
+      <File FileName="Assets\Echo\EchoProp.cs" Line="254" Column="31" />
+      <File FileName="Assets\Shoot\Shoot.cs" Line="27" Column="5" />
+      <File FileName="Assets\Shoot\Bullet.cs" Line="31" Column="74" />
+      <File FileName="Assets\Echo\Skin.shader" Line="39" Column="36" />
+      <File FileName="Assets\Timer.cs" Line="31" Column="23" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -24,8 +24,11 @@ public class Timer : MonoBehaviour {
 
 	void Tick () {
 		guiTime = Mathf.Floor(endTime - Time.time);
-		if (guiTime >= 0) {
+		if (guiTime > 0) {
 			text.text = guiTime.ToString ();
+		}
+		if (guiTime <= 0) {
+			text.text = "TIME";
 		}
 	}
 

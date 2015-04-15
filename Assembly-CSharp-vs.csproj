@@ -51,6 +51,7 @@
      <Compile Include="Assets\Echo.cs" />
      <Compile Include="Assets\Echo\EchoProp.cs" />
      <Compile Include="Assets\Echo\FloatPacking.cs" />
+     <Compile Include="Assets\Menu\Menu.cs" />
      <Compile Include="Assets\Movement.cs" />
      <Compile Include="Assets\Player.cs" />
      <Compile Include="Assets\Shoot\Bullet.cs" />

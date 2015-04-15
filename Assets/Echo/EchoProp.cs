@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 [Serializable]
 public class EchoSphere3 {
-	public enum ShaderPackingMode { Texture, Property };
+	public enum ShaderPackingMode { Property, Texture };
 	public ShaderPackingMode CurrentPackingMode = ShaderPackingMode.Texture;
 	
 	public Texture2D EchoTexture;
@@ -127,6 +127,7 @@ public class EchoProp : MonoBehaviour {
 	public int SphereCount = 1;
 	public int CurrentSphere = 0;
 	public int CurrentSphere2 = 0;
+	public int CurrentSphere3 = 0;
 	public int CurrentStep = 0;
 	// Echo sphere Properties
 	public float SphereMaxRadius = 10.0f;		//Final size of the echo sphere.
@@ -137,11 +138,12 @@ public class EchoProp : MonoBehaviour {
 	
 	private List<EchoSphere3> Spheres = new List<EchoSphere3>();
 	private List<EchoSphere3> Spheres2 = new List<EchoSphere3>();
-	
+	private List<EchoSphere3> Spheres3 = new List<EchoSphere3>();
+
 	public CharacterController control;
 	
 	// Use this for initialization
-	void Start () {		
+	void Start () {
 		CreateEchoTexture();
 		InitializeSpheres();
 		control = gameObject.GetComponent < CharacterController > ();
@@ -174,6 +176,19 @@ public class EchoProp : MonoBehaviour {
 			};
 			Spheres2.Add(es);
 		}
+		for (int i = 10; i < SphereCount + 10; i++) {
+			EchoSphere3 es = new  EchoSphere3{
+				EchoMaterial = EchoMaterial,
+				EchoTexture = EchoTexture,
+				echoSpeed = echoSpeed,
+				SphereMaxRadius = SphereMaxRadius,
+				FadeDelay = FadeDelay,
+				FadeRate = FadeRate,
+				SphereIndex = i,
+				CurrentPackingMode = CurrentPackingMode
+			};
+			Spheres3.Add(es);
+		}
 	}
 	/// <summary>
 	/// Create an echo texture used to hold multiple echo sources and fades.
@@ -197,7 +212,12 @@ public class EchoProp : MonoBehaviour {
 		foreach (EchoSphere3 es in Spheres2) {
 			es.Update();
 		}
-		UpdateRayCast();
+		if (gameObject.tag != "Echo") {
+			UpdateRayCast();
+		} else {
+			Debug.Log ("HELLOSOSOSOS");
+			UpdateRoom();
+		}
 	}
 	
 	// Called to manually place echo pulse
@@ -222,14 +242,19 @@ public class EchoProp : MonoBehaviour {
 			}
 		}
 	}
-	
-//	void UpdateSteps () {
-//		Debug.Log ("Trigger step [" + CurrentStep.ToString () + "]");
-//		Steps[CurrentStep].TriggerPulse();
-//		Debug.Log (gameObject.transform.position);
-//		Steps[CurrentStep].Position = gameObject.transform.position;
-//		
-//		CurrentStep += 1;
-//		if(CurrentStep >= Steps.Count) CurrentStep = 0;
-//	}
+
+	void UpdateRoom() {
+		StartCoroutine("Wait");
+		Ray ray = Camera.main.ScreenPointToRay(gameObject.transform.position);
+		if (Physics.Raycast(transform.position , transform.forward)) {
+			Spheres[CurrentSphere3].TriggerPulse();
+			Spheres[CurrentSphere3].Position = transform.position;
+		}
+		double time = Time.time;
+		double endTime = time + 5.0;
+	}
+
+	IEnumerator Wait() {
+		yield return new WaitForSeconds(5);
+	}
 }

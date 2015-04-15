@@ -3,11 +3,16 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class Bullet : MonoBehaviour {
-	int MCLayer = 9;
-	public bool trigger;
 	public Vector3 coll;
 	public Text text;
-	private int tag;
+	public bool hasCollided;
+	public bool trigger;
+
+	int MCLayer = 9;
+	public Material mat;
+	string material = "EchoMat";
+
+	int tag;
 
 	void Start () {
 		tag = int.Parse(gameObject.tag);
@@ -17,20 +22,30 @@ public class Bullet : MonoBehaviour {
 			tag = 2;
 		}
 		trigger = false;
+		hasCollided = false;
 	}
 
 	void OnCollisionEnter (Collision collision) {
 		trigger = true;
 		coll = collision.contacts[0].point;
-		if (collision.gameObject.layer == MCLayer && collision.gameObject != transform.parent.gameObject) {
-			Debug.Log ("YES");
+		if (collision.gameObject.layer == MCLayer && collision.gameObject.tag != gameObject.tag) {
 			Increment ();
 			Respawn (collision);
+			return;
 		}
+		GameObject[] echoList = GameObject.FindGameObjectsWithTag (gameObject.tag);
+		foreach (GameObject obj in echoList) {
+			Bullet bullet = obj.GetComponent< Bullet > ();
+			if (bullet != null) {
+				if (bullet.hasCollided) {
+					Destroy (obj);
+				}
+			}
+		}
+		hasCollided = true;
 		Destroy (GetComponent< Collider > ());
 		Destroy (GetComponent< Rigidbody > ());
 		Destroy (GetComponent< MeshRenderer > ());
-//		Destroy (gameObject);
 	}
 
 	void Increment () {

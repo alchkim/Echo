@@ -4,6 +4,7 @@
 		_EchoTex ("Echo (RGBA)", 2D) = "white" {}
 		_MainColor ("Main Color",Color) = (1.0,1.0,1.0,1.0)
 		_SecondColor ("Second Color",Color) = (1.0,1.0,1.0,1.0)
+		_ThirdColor ("Third Color",Color) = (1.0,1.0,1.0,1.0)
 		_DistanceFade("Distance Fade",float) = 1.0	
 		_MaxRadius("MaxRadius",float) = 1.0
 		_MaxFade("MaxFade",float) = 1.0
@@ -23,6 +24,7 @@
 		_Position7("Position7",Vector) = (0.0,0.0,0.0)
 		_Position8("Position8",Vector) = (0.0,0.0,0.0)
 		_Position9("Position9",Vector) = (0.0,0.0,0.0)
+		_Position10("Position10",Vector) = (0.0,0.0,0.0)
 						
 		_Radius0("Radius0",float) = 0.0	
 		_Radius1("Radius1",float) = 0.0	
@@ -34,6 +36,7 @@
 		_Radius7("Radius7",float) = 0.0	
 		_Radius8("Radius8",float) = 0.0	
 		_Radius9("Radius9",float) = 0.0
+		_Radius10("Radius10",float) = 0.0
 						
 		_Fade0("Fade0",float) = 0.0
 		_Fade1("Fade1",float) = 0.0
@@ -45,6 +48,7 @@
 		_Fade7("Fade7",float) = 0.0
 		_Fade8("Fade8",float) = 0.0
 		_Fade9("Fade9",float) = 0.0
+		_Fade10("Fade10",float) = 0.0
 	} 
 	
 	SubShader {
@@ -66,6 +70,7 @@
 		
 		float4 _MainColor;
 		float4 _SecondColor;
+		float4 _ThirdColor;
 		float _DistanceFade;
 		float _MaxRadius;
 		float _MaxFade;
@@ -80,6 +85,7 @@
 		float3 _Position7;
 		float3 _Position8;
 		float3 _Position9;
+		float3 _Position10;
 						
 		float _Radius0;
 		float _Radius1;
@@ -91,6 +97,7 @@
 		float _Radius7;
 		float _Radius8;
 		float _Radius9;
+		float _Radius10;
 						
 		float _Fade0;
 		float _Fade1;
@@ -102,6 +109,7 @@
 		float _Fade7;
 		float _Fade8;
 		float _Fade9;
+		float _Fade10;
 		
 		// Custom light model that ignores actual lighting. 
 		half4 LightingNoLighting (SurfaceOutput s, half3 lightDir, half atten) {
@@ -138,6 +146,8 @@
 		void surf (Input IN, inout SurfaceOutput o) {
 			float c1 = 0.0;
 			float c3 = 0.0;
+			float c5 = 0.0;
+			
 			// manually add more echos here.
 			c1 += ApplyFade(IN,_Position0,_Radius0,_Fade0);
 			c1 += ApplyFade(IN,_Position1,_Radius1,_Fade1);
@@ -155,11 +165,16 @@
 			
 			c3 /= 5.0;  
 		
-			float c2 = .5 - c1;
+			c5 += ApplyFade(IN,_Position10,_Radius10,_Fade10);
+						
+			float c2 = .4 - c1;
 			o.Albedo = _MainColor.rgb * c2 + tex2D (_MainTex, IN.uv_MainTex).rgb * c1 ;		
 
-			float c4 = .5 - c3;
+			float c4 = .4 - c3;
 			o.Albedo += _SecondColor.rgb * c4 + tex2D (_MainTex, IN.uv_MainTex).rgb * c3 ;	
+			
+			float c6 = .2 - c5;
+			o.Albedo += _ThirdColor.rgb * c6 + tex2D (_MainTex, IN.uv_MainTex).rgb * c5 ;	
 		}
 		ENDCG
 	} 
