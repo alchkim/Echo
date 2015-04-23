@@ -33,16 +33,7 @@ public class EchoSphere3 {
 	// Update is called once per frame
 	public void Update () {
 		if(EchoMaterial == null)return;
-		
-		// If manual selection is disabled, automatically trigger a pulse at the given freq.
-		//		if(!is_manual){
-		//			deltaTime += Time.deltaTime;
-		//			if(deltaTime >= pulse_frequency && !is_animated){
-		//				TriggerPulse();
-		//			}
-		//		} else {
-		//			deltaTime += Time.deltaTime;
-		//		}
+
 		deltaTime += Time.deltaTime;
 		UpdateEcho();
 		
@@ -75,7 +66,6 @@ public class EchoSphere3 {
 		float maxRadius = SphereMaxRadius;
 		float maxFade = SphereMaxRadius / echoSpeed;
 		
-		Debug.Log("Updating _Position"+SphereIndex.ToString());
 		EchoMaterial.SetVector("_Position"+SphereIndex.ToString(),Position);
 		EchoMaterial.SetFloat("_Radius"+SphereIndex.ToString(),sphereCurrentRadius);
 		EchoMaterial.SetFloat("_Fade"+SphereIndex.ToString(),fade);
@@ -215,7 +205,6 @@ public class EchoProp : MonoBehaviour {
 		if (gameObject.tag != "Echo") {
 			UpdateRayCast();
 		} else {
-			Debug.Log ("HELLOSOSOSOS");
 			UpdateRoom();
 		}
 	}

@@ -59,7 +59,6 @@ public class MouseLook : MonoBehaviour {
 	{
 		xrot = gameObject.tag;
 		yrot = transform.parent.gameObject.tag;
-		Debug.Log (yrot);
 		// Make the rigid body not change rotation
 		if (GetComponent<Rigidbody>())
 			GetComponent<Rigidbody>().freezeRotation = true;

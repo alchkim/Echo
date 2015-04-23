@@ -8,6 +8,8 @@ public class Timer : MonoBehaviour {
 	private float endTime;
 	private float guiTime;
 	public Text text;
+	public Text p1;
+	public Text p2;
 	// Use this for initialization
 	void Start () {
 		startTime = Time.time;
@@ -29,6 +31,13 @@ public class Timer : MonoBehaviour {
 		}
 		if (guiTime <= 0) {
 			text.text = "TIME";
+			if (int.Parse(p1.text) > int.Parse(p2.text)) {
+				Application.LoadLevel ("_Player1Win");
+			} else if (int.Parse(p1.text) < int.Parse(p2.text)) {
+				Application.LoadLevel ("_Player2Win");
+			} else {
+				Application.LoadLevel ("_Tie");
+			}
 		}
 	}
 
