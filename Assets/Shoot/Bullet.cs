@@ -1,10 +1,9 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class Bullet : MonoBehaviour {
 	public Vector3 coll;
-//	public Text text;
 	public bool hasCollided;
 	public bool trigger;
 

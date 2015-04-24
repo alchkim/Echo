@@ -9,7 +9,6 @@ public class Menu : MonoBehaviour {
 		loadLevel = "_Shooter";
 	}
 	public void OnStart () {
-		Debug.Log ("BOB");
 		Application.LoadLevel (loadLevel);
 	}
 }

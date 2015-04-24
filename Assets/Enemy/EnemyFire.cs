@@ -12,6 +12,7 @@ public class EnemyFire : MonoBehaviour {
 	float pastTime;
 	GameObject list;
 	private string player;
+	int currentSphere;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,7 @@ public class EnemyFire : MonoBehaviour {
 		list = GameObject.Find ("Empty" + player);
 		pastTime = Time.time;
 		currTime = Time.time;
+		currentSphere = 0;
 	}
 	
 	// Update is called once per frame
@@ -56,6 +58,9 @@ public class EnemyFire : MonoBehaviour {
 		}
 		if (bullet != null) {
 			bullet.transform.parent = list.transform;
+			bullet.GetComponent< EchoProp > ().CurrentSphere3 = currentSphere;
+			currentSphere += 1;
+			if (currentSphere > 3) currentSphere = 0;
 		}
 
 	}

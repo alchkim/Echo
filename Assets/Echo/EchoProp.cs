@@ -51,7 +51,6 @@ public class EchoSphere3 {
 	
 	// Called to halt an echo pulse.
 	void HaltPulse(){
-		Debug.Log("HaltPulse reached");
 		is_animated = false;	
 	}
 	
@@ -63,6 +62,7 @@ public class EchoSphere3 {
 	
 	void UpdateProperties(){
 		if(!is_animated)return;
+
 		float maxRadius = SphereMaxRadius;
 		float maxFade = SphereMaxRadius / echoSpeed;
 		
@@ -120,7 +120,7 @@ public class EchoProp : MonoBehaviour {
 	public int CurrentSphere3 = 0;
 	public int CurrentStep = 0;
 	// Echo sphere Properties
-	public float SphereMaxRadius = 10.0f;		//Final size of the echo sphere.
+	public float SphereMaxRadius = 5.0f;		//Final size of the echo sphere.
 	
 	public float FadeDelay = 0.0f;			//Time to delay before triggering fade.
 	public float FadeRate = 1.0f;			//Speed of the fade away
@@ -166,7 +166,7 @@ public class EchoProp : MonoBehaviour {
 			};
 			Spheres2.Add(es);
 		}
-		for (int i = 10; i < SphereCount + 10; i++) {
+		for (int i = 10; i < SphereCount + 14; i++) {
 			EchoSphere3 es = new  EchoSphere3{
 				EchoMaterial = EchoMaterial,
 				EchoTexture = EchoTexture,
@@ -191,22 +191,18 @@ public class EchoProp : MonoBehaviour {
 		EchoMaterial.SetTexture("_EchoTex",EchoTexture);
 	}
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		if(EchoMaterial == null)return;
-		//		if (control.velocity != Vector3.zero) {
-		//			UpdateSteps ();
-		//		}
 		foreach (EchoSphere3 es in Spheres){
 			es.Update();
 		}
 		foreach (EchoSphere3 es in Spheres2) {
 			es.Update();
 		}
-		if (gameObject.tag != "Echo") {
-			UpdateRayCast();
-		} else {
-			UpdateRoom();
+		foreach (EchoSphere3 es in Spheres3) {
+			es.Update();
 		}
+//		UpdateRayCast();
 	}
 	
 	// Called to manually place echo pulse
@@ -227,23 +223,50 @@ public class EchoProp : MonoBehaviour {
 					
 					CurrentSphere2 += 1;
 					if(CurrentSphere2 >= Spheres.Count)CurrentSphere2 = 0;
+				} else if (int.Parse(bullet.tag) == 3) {
+					Spheres3[CurrentSphere3].TriggerPulse();
+					Spheres3[CurrentSphere3].Position = transform.position;
+					
+					CurrentSphere3 += 1;
+					if(CurrentSphere3 >= Spheres.Count)CurrentSphere3 = 0;
 				}
 			}
 		}
 	}
 
-	void UpdateRoom() {
-		StartCoroutine("Wait");
-		Ray ray = Camera.main.ScreenPointToRay(gameObject.transform.position);
-		if (Physics.Raycast(transform.position , transform.forward)) {
-			Spheres[CurrentSphere3].TriggerPulse();
-			Spheres[CurrentSphere3].Position = transform.position;
-		}
-		double time = Time.time;
-		double endTime = time + 5.0;
-	}
+	void UpdateRayCast(Collision coll) {
+		Bullet bullet = GetComponent< Bullet > ();
+		if (bullet.trigger) {
+			Ray ray = Camera.main.ScreenPointToRay(bullet.coll);
+//			Debug.Log (transform.forward);
 
-	IEnumerator Wait() {
-		yield return new WaitForSeconds(5);
+//			if (Physics.Raycast(transform.position , transform.forward)) {
+				if (int.Parse(bullet.tag) == 1) {
+					Spheres[CurrentSphere].TriggerPulse();
+					Spheres[CurrentSphere].Position = transform.position;
+					
+					CurrentSphere += 1;
+					if(CurrentSphere >= Spheres.Count)CurrentSphere = 0;
+				} else if (int.Parse(bullet.tag) == 2) {
+					Spheres2[CurrentSphere2].TriggerPulse();
+					Spheres2[CurrentSphere2].Position = transform.position;
+					
+					CurrentSphere2 += 1;
+					if(CurrentSphere2 >= Spheres.Count)CurrentSphere2 = 0;
+				} else if (int.Parse(bullet.tag) == 3) {
+					Spheres3[CurrentSphere3].TriggerPulse();
+					Spheres3[CurrentSphere3].Position = transform.position;
+					
+					CurrentSphere3 += 1;
+					if(CurrentSphere3 >= Spheres.Count)CurrentSphere3 = 0;
+				}
+//			}
+		}
+	}
+	
+	void OnCollisionEnter (Collision coll) {
+		if (gameObject.layer.ToString() == "8") {
+			UpdateRayCast (coll);
+		}
 	}
 }

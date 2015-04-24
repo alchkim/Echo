@@ -1,4 +1,4 @@
-﻿Shader "Custom/Echo/Skin" {
+Shader "Custom/Echo/Skin" {
 	Properties {
 		_MainTex ("Base (RGB)", 2D) = "black" {}
 		_EchoTex ("Echo (RGBA)", 2D) = "white" {}
@@ -11,8 +11,6 @@
 		
 		_OutlineColor ("Outline Color", Color) = (0,0,0,1)
 		_Outline ("Outline width", Range (.002, 0.03)) = .005
-//		_ToonShade ("ToonShader Cubemap(RGB)", CUBE) = "" { Texgen CubeNormal }
-
 
 		_Position0("Position0",Vector) = (0.0,0.0,0.0)
 		_Position1("Position1",Vector) = (0.0,0.0,0.0)
@@ -25,6 +23,9 @@
 		_Position8("Position8",Vector) = (0.0,0.0,0.0)
 		_Position9("Position9",Vector) = (0.0,0.0,0.0)
 		_Position10("Position10",Vector) = (0.0,0.0,0.0)
+		_Position11("Position11",Vector) = (0.0,0.0,0.0)
+		_Position12("Position12",Vector) = (0.0,0.0,0.0)
+		_Position13("Position13",Vector) = (0.0,0.0,0.0)
 						
 		_Radius0("Radius0",float) = 0.0	
 		_Radius1("Radius1",float) = 0.0	
@@ -37,6 +38,9 @@
 		_Radius8("Radius8",float) = 0.0	
 		_Radius9("Radius9",float) = 0.0
 		_Radius10("Radius10",float) = 0.0
+		_Radius11("Radius11",float) = 0.0
+		_Radius12("Radius12",float) = 0.0
+		_Radius13("Radius13",float) = 0.0
 						
 		_Fade0("Fade0",float) = 0.0
 		_Fade1("Fade1",float) = 0.0
@@ -49,6 +53,9 @@
 		_Fade8("Fade8",float) = 0.0
 		_Fade9("Fade9",float) = 0.0
 		_Fade10("Fade10",float) = 0.0
+		_Fade11("Fade11",float) = 0.0
+		_Fade12("Fade12",float) = 0.0
+		_Fade13("Fade13",float) = 0.0
 	} 
 	
 	SubShader {
@@ -86,6 +93,9 @@
 		float3 _Position8;
 		float3 _Position9;
 		float3 _Position10;
+		float3 _Position11;
+		float3 _Position12;
+		float3 _Position13;
 						
 		float _Radius0;
 		float _Radius1;
@@ -98,7 +108,10 @@
 		float _Radius8;
 		float _Radius9;
 		float _Radius10;
-						
+		float _Radius11;
+		float _Radius12;
+		float _Radius13;
+														
 		float _Fade0;
 		float _Fade1;
 		float _Fade2;
@@ -110,12 +123,14 @@
 		float _Fade8;
 		float _Fade9;
 		float _Fade10;
+		float _Fade11;
+		float _Fade12;
+		float _Fade13;
 		
 		// Custom light model that ignores actual lighting. 
 		half4 LightingNoLighting (SurfaceOutput s, half3 lightDir, half atten) {
 			half4 c;
 			c.rgb = s.Albedo * 10.0f;
-//			c.rgb = s.Albedo*5.0f;
 			c.a = s.Alpha;
 			return c;
 		}
@@ -129,15 +144,12 @@
 			} else {
 				// If _DistanceFade = true, fading is related to vertex distance from echo origin.
 				// If false, fading is even across entire echo.
-				
-//				float c1 = (_DistanceFade>=1.0) ? pow(dist/radius, 100) : 1.0;
-//				float c1 = (_DistanceFade>=1.0) ? (.75 * pow(dist/radius, 50) + .25 * sqrt(dist/radius)) : 1.0;
+
 				float c1 = (_DistanceFade>=1.0) ? sqrt(dist/radius) : 1.0;
 				// Apply fading effect.
 				c1 *= (infade > _MaxFade) ? 0 : 1;
-//				c1 *= (infade<=_MaxFade) ? 1.0-infade/_MaxFade : 0.0f;	//adjust by fade distance.
 				// Ignore Fade values <= 0 (meaning no fade.)
-				c1 = (infade<=0)?1.0:c1;
+				c1 = (infade <= 0) ? 1.0 : c1;
 				
 				return c1;
 			}
@@ -166,11 +178,16 @@
 			c3 /= 5.0;  
 		
 			c5 += ApplyFade(IN,_Position10,_Radius10,_Fade10);
+			c5 += ApplyFade(IN,_Position11,_Radius11,_Fade11);
+			c5 += ApplyFade(IN,_Position12,_Radius12,_Fade12);
+			c5 += ApplyFade(IN,_Position13,_Radius13,_Fade13);
+			
+			c5 /= 4.0;
 						
-			float c2 = .4 - c1;
+			float c2 = .1 - c1;
 			o.Albedo = _MainColor.rgb * c2 + tex2D (_MainTex, IN.uv_MainTex).rgb * c1 ;		
 
-			float c4 = .4 - c3;
+			float c4 = .1 - c3;
 			o.Albedo += _SecondColor.rgb * c4 + tex2D (_MainTex, IN.uv_MainTex).rgb * c3 ;	
 			
 			float c6 = .2 - c5;
